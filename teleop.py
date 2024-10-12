@@ -1,15 +1,13 @@
 import serial
 import time
-import pygame
+from flask import Flask, request, jsonify
 
 from constants import SER_PORT
 
 # Configure the serial port
 ser = serial.Serial(SER_PORT, 115200, timeout=1)  # Adjust port name if necessary
 
-# Initialize pygame and the joystick
-pygame.init()
-pygame.joystick.init()
+app = Flask(__name__)
 
 def send_values(strafe, forward, turn):
     # Ensure values are within range and format as 4-digit strings
@@ -23,45 +21,32 @@ def send_values(strafe, forward, turn):
     # Send the data
     ser.write(data.encode())
 
-def map_axis_to_value(axis_value):
-    # Map the axis value (-1 to 1) to the range 192 to 1792
-    return int(992 + axis_value * 800)
+def map_normalized_to_value(norm_value):
+    # Map the normalized value (-1 to 1) to the range 192 to 1792
+    return int(992 + norm_value * 800)
 
-try:
-    # Check for available joysticks
-    if pygame.joystick.get_count() == 0:
-        print("No joystick detected. Please connect a PS5 controller.")
-        exit()
+@app.route('/control', methods=['POST'])
+def control():
+    data = request.json
+    if not data or 'x' not in data or 'y' not in data or 'angular' not in data:
+        return jsonify({"error": "Invalid data"}), 400
 
-    joystick = pygame.joystick.Joystick(0)
-    joystick.init()
+    x = data['x']  # strafe
+    y = data['y']  # forward/backward
+    angular = data['angular']  # turn
 
-    print("Controller connected. Use left stick to move, right stick to turn.")
-    print("Press Ctrl+C to exit.")
+    strafe = map_normalized_to_value(x)
+    forward = map_normalized_to_value(y)
+    turn = map_normalized_to_value(angular)
 
-    while True:
-        pygame.event.pump()  # Process event queue
-        
-        # Get joystick values
-        left_x = joystick.get_axis(0)  # Left stick X-axis (strafe)
-        left_y = -joystick.get_axis(1)  # Left stick Y-axis (forward/backward)
-        right_x = joystick.get_axis(2)  # Right stick X-axis (turn)
+    send_values(strafe, forward, turn)
 
-        # Map joystick values to robot control values
-        strafe = map_axis_to_value(left_x)
-        forward = map_axis_to_value(left_y)
-        turn = map_axis_to_value(right_x)
+    return jsonify({"status": "success"}), 200
 
-        # Send values to the robot
-        send_values(strafe, forward, turn)
-
-        time.sleep(0.05)  # Short delay to avoid flooding the serial port
-
-except KeyboardInterrupt:
-    print("Stopping...")
-finally:
-    # Stop the robot
-    send_values(992, 992, 992)
-    ser.close()
-    pygame.quit()
-    print("Serial port closed and pygame terminated.")
+if __name__ == '__main__':
+    try:
+        app.run(host='0.0.0.0', port=5000)
+    finally:
+        send_values(992, 992, 992)  # Stop the robot
+        ser.close()
+        print("Serial port closed.")
