@@ -19,7 +19,11 @@ def send_values(strafe, forward, turn):
     ser.write(data.encode())
 
 try:
-    while True:
+
+    start = time.time()
+
+
+    while time.time() - start < 2:
         # Example: send random values
         strafe = 992
         forward = 1400
@@ -27,6 +31,7 @@ try:
         
         send_values(strafe, forward, turn)
         time.sleep(0.1)  # Short delay to avoid flooding the serial port
+    send_values(992, 992, 992)
 
 except KeyboardInterrupt:
     print("Stopping...")
