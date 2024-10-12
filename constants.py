@@ -1,1 +1,1 @@
-SER_PORT = "/dev/ttyS0"
+SER_PORT = "/dev/ttyACM0"
