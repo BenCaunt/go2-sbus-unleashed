@@ -1,0 +1,1 @@
+SER_PORT = "/dev/ttyS0"

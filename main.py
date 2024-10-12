@@ -1,8 +1,10 @@
 import serial
 import time
 
+from constants import SER_PORT
+
 # Configure the serial port
-ser = serial.Serial('/dev/tty.usbmodem101', 115200, timeout=1)  # Adjust port name if necessary
+ser = serial.Serial(SER_PORT, 115200, timeout=1)  # Adjust port name if necessary
 
 def send_values(strafe, forward, turn):
     # Ensure values are within range and format as 4-digit strings
