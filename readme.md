@@ -1,11 +1,11 @@
-# Go2Liberty
+# go2-sbus-unleashed
 
-Go2Liberty is a project that enables control of the Unitree Go2 quadruped robot using the SBUS port, allowing for operation on non-edu (more affordable) models without requiring a jailbreak.
+go2-sbus-unleashed is a project that enables control of the Unitree Go2 quadruped robot using the SBUS port, allowing for operation on non-edu (more affordable) models without requiring a jailbreak.
 
 ## Project Structure
 
 ```
-Go2Liberty/
+go2-sbus-unleashed/
 │
 ├── esp32/
 │   └── serial-bus-converter/
