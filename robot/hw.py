@@ -52,11 +52,7 @@ def map_normalized_to_value(norm_value):
 class OpenCVCamera(Subsystem):
     def __init__(self):
         self.cap = cv2.VideoCapture(0)
-        
-        # Initialize Rerun for remote streaming
-        rr.init("OpenCVCamera", spawn=False)
-        rr.connect("{LAPTOP_IP}:9876")
-        
+                
     def get_frame(self):
         ret, frame = self.cap.read()
         if ret:
