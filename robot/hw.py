@@ -143,7 +143,6 @@ class OpenCVCamera(Subsystem):
             print("logging frame")
             rr.log("camera", rr.Image(dst))
         self.frame_count += 1
-        sleep(0.1)
 
         return dst, cx_ret
 

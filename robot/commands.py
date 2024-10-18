@@ -115,7 +115,7 @@ class AprilTagCenterHeading(Command):
     """
     def __init__(self, hw: RobotHardware):
         super().__init__(hw)
-        self.kp = 0.008
+        self.kp = 0.005
         
     def start(self):
         self.start_time = time.time()
@@ -126,6 +126,7 @@ class AprilTagCenterHeading(Command):
         frame, cx = self.hw.camera.get_frame()
         error = cx - 200
         turn = self.kp * error
+        turn = max(-0.6, min(0.6, turn))
         print(f"turn: {turn}")
         self.hw.send_values(0, 0, -turn)
         self.last_error = error
