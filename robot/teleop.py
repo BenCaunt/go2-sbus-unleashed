@@ -3,7 +3,7 @@ import time
 from flask import Flask, request, jsonify
 import rerun as rr
 from hw import RobotHardware
-from commands import DriveCommand, DriveSignal, Scheduler
+from commands import AprilTagCenterHeading, DriveCommand, DriveSignal, Scheduler
 
 # Configure the robot hardware
 hw = RobotHardware()
@@ -31,11 +31,10 @@ def control():
 
 if __name__ == '__main__':
     
-    drive_command = DriveCommand(hw, drive_signal=DriveSignal(0.4, 0, 0), duration=4)
+    tag_align = AprilTagCenterHeading(hw)
     
-    scheduler = Scheduler(hw, [drive_command])
-    scheduler.add_command(drive_command)
-    # scheduler.run()
+    scheduler = Scheduler(hw, [tag_align])
+    scheduler.run()
 
     try:
         app.run(host='0.0.0.0', port=5000)
