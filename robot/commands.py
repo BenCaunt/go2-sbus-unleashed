@@ -129,7 +129,7 @@ class AprilTagCenterHeading(Command):
         turn = self.kp * error
         turn = max(-0.6, min(0.6, turn))
         print(f"turn: {turn}")
-        self.hw.send_values(0, 0, turn)
+        self.hw.send_values(0, 0, -turn)
         self.last_error = error
         
     def is_finished(self):
