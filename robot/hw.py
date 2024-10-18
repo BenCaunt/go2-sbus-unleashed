@@ -86,15 +86,16 @@ class OpenCVCamera(Subsystem):
         # Get frame dimensions
         h, w = frame.shape[:2]
 
-        # Get optimal new camera matrix
-        newcameramtx, roi = cv2.getOptimalNewCameraMatrix(matrix, distortion, (w,h), 1, (w,h))
+        # # Get optimal new camera matrix
+        # newcameramtx, roi = cv2.getOptimalNewCameraMatrix(matrix, distortion, (w,h), 1, (w,h))
 
-        # Undistort the frame
-        dst = cv2.undistort(frame, matrix, distortion, None, newcameramtx)
+        # # Undistort the frame
+        # dst = cv2.undistort(frame, matrix, distortion, None, newcameramtx)
+        dst = frame
 
         # Crop the frame
-        x, y, w, h = roi
-        dst = dst[y:y+h, x:x+w]
+        # x, y, w, h = roi
+        # dst = dst[y:y+h, x:x+w]
 
         # Convert to grayscale
         gray = cv2.cvtColor(dst, cv2.COLOR_BGR2GRAY)
