@@ -31,6 +31,11 @@ def control():
 
 if __name__ == '__main__':
     
+    tag_align = AprilTagCenterHeading(hw)
+    
+    scheduler = Scheduler(hw, [tag_align])
+    scheduler.run()
+
     try:
         app.run(host='0.0.0.0', port=5000)
     except KeyboardInterrupt:
