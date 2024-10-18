@@ -24,6 +24,7 @@ def control():
     angular = data['angular']  # turn
         
     hw.send_values(x, y, angular)
+    hw.tick()
 
     return jsonify({"status": "success"}), 200
 
