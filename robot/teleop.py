@@ -2,7 +2,6 @@ import serial
 import time
 from flask import Flask, request, jsonify
 import rerun as rr
-from constants import SER_PORT
 from hw import RobotHardware
 
 # Configure the serial port

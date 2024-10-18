@@ -1,6 +1,6 @@
 import serial
 
-from robot.constants import SER_PORT
+from constants import SER_PORT
 import rerun as rr
 import cv2
 from abc import ABC, abstractmethod
