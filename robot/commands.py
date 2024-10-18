@@ -127,8 +127,10 @@ class AprilTagCenterHeading(Command):
     
     def tick(self):
         frame, cx = self.hw.camera.get_frame()
+        print(f"cx: {cx}")
         error = cx - 200
         turn = self.kp * error
+        print(f"turn: {turn}")
         self.hw.send_values(0, 0, turn)
         self.last_error = error
         
