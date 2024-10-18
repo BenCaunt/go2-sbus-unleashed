@@ -57,6 +57,7 @@ class OpenCVCamera(Subsystem):
     def get_frame(self):
         ret, frame = self.cap.read()
         if ret:
+            print("got frame")
             # Log the frame to Rerun
             rr.log("camera", rr.Image(frame))
             sleep(0.2)
