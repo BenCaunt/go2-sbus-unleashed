@@ -128,11 +128,12 @@ class OpenCVCamera(Subsystem):
             cv2.putText(dst, tagID, (ptA[0], ptA[1] - 15),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
-            # Log the frame to Rerun
-            if self.frame_count % 10 == 0:
-                rr.log("camera", rr.Image(dst))
-            self.frame_count += 1
-            sleep(0.2)
+        # Log the frame to Rerun
+        if self.frame_count % 10 == 0:
+            print("logging frame")
+            rr.log("camera", rr.Image(dst))
+        self.frame_count += 1
+        sleep(0.2)
 
         return dst
 
