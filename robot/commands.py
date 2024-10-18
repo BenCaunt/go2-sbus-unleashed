@@ -39,13 +39,10 @@ class Scheduler:
         self.commands.append(command)
         
     def start(self):
-        print("Starting scheduler...")
         self.is_running = True
         self.commands[self.current_command].start()
         
     def tick(self):
-        print("Tick scheduler...")
-        print(f"Current command: {self.current_command}")
         self.commands[self.current_command].tick()
         if self.commands[self.current_command].is_finished():
             self.commands[self.current_command].stop()
@@ -118,7 +115,7 @@ class AprilTagCenterHeading(Command):
     """
     def __init__(self, hw: RobotHardware):
         super().__init__(hw)
-        self.kp = 0.002
+        self.kp = 0.008
         
     def start(self):
         self.start_time = time.time()
@@ -127,7 +124,6 @@ class AprilTagCenterHeading(Command):
     
     def tick(self):
         frame, cx = self.hw.camera.get_frame()
-        print(f"cx: {cx}")
         error = cx - 200
         turn = self.kp * error
         print(f"turn: {turn}")
