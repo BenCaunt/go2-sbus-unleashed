@@ -83,7 +83,7 @@ class OpenCVCamera(Subsystem):
             frame = cv2.flip(frame, -1)
         else:
             print("failed to get frame")
-            return None
+            return None, 200
 
         # Get frame dimensions
         h, w = frame.shape[:2]
@@ -105,8 +105,8 @@ class OpenCVCamera(Subsystem):
         # Detect AprilTags
         results = self.detector.detect(gray)
         
-        cx = 200
-        cy = 0
+        cx_ret = 200
+
 
         # Draw detections on the frame
         for r in results:
@@ -130,6 +130,10 @@ class OpenCVCamera(Subsystem):
 
             # draw the tag ID on the image
             tagID = str(r.tag_id)
+            if r.tag_id == 321:
+                print("found tag!")
+                cx_ret = cX
+            
             print(f"tagID: {tagID} {cX} {cY}")
             cv2.putText(dst, tagID, (ptA[0], ptA[1] - 15),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
@@ -141,7 +145,7 @@ class OpenCVCamera(Subsystem):
         self.frame_count += 1
         sleep(0.1)
 
-        return dst, cx
+        return dst, cx_ret
 
     def release(self):
         self.cap.release()
