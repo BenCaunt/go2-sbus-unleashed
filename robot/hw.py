@@ -147,3 +147,5 @@ class OpenCVCamera(Subsystem):
         self.cap.release()
         rr.disconnect()
 
+    def tick(self):
+        pass
