@@ -116,6 +116,7 @@ class AprilTagCenterHeading(Command):
     def __init__(self, hw: RobotHardware):
         super().__init__(hw)
         self.kp = 0.005
+        self.cx_ref = 300
         
     def start(self):
         self.start_time = time.time()
@@ -124,7 +125,7 @@ class AprilTagCenterHeading(Command):
     
     def tick(self):
         frame, cx = self.hw.camera.get_frame()
-        error = cx - 200
+        error = cx - self.cx_ref
         turn = self.kp * error
         turn = max(-0.6, min(0.6, turn))
         print(f"turn: {turn}")
