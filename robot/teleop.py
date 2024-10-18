@@ -22,12 +22,7 @@ def control():
     x = data['x']  # strafe
     y = data['y']  # forward/backward
     angular = data['angular']  # turn
-    
-    # Log control data to Rerun
-    rr.log_scalar("control/x", time.time(), x)
-    rr.log_scalar("control/y", time.time(), y)
-    rr.log_scalar("control/angular", time.time(), angular)
-    
+        
     hw.send_values(x, y, angular)
 
     return jsonify({"status": "success"}), 200
