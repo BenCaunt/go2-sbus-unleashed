@@ -53,13 +53,17 @@ from time import sleep
 class OpenCVCamera(Subsystem):
     def __init__(self):
         self.cap = cv2.VideoCapture(0)
+        self.frame_count = 0
+        
                 
     def get_frame(self):
         ret, frame = self.cap.read()
         if ret:
             print("got frame")
             # Log the frame to Rerun
-            rr.log("camera", rr.Image(frame))
+            if self.frame_count % 10 == 0:
+                rr.log("camera", rr.Image(frame))
+            self.frame_count += 1
             sleep(0.2)
 
         return frame
