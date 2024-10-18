@@ -35,6 +35,7 @@ if __name__ == '__main__':
     
     scheduler = Scheduler(hw, [drive_command])
     scheduler.add_command(drive_command)
+    scheduler.run()
 
     try:
         app.run(host='0.0.0.0', port=5000)
