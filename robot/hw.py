@@ -125,6 +125,7 @@ class OpenCVCamera(Subsystem):
 
             # draw the tag ID on the image
             tagID = str(r.tag_id)
+            print(f"tagID: {tagID} {cX} {cY}")
             cv2.putText(dst, tagID, (ptA[0], ptA[1] - 15),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
