@@ -31,11 +31,11 @@ def control():
 
 if __name__ == '__main__':
     
-    # drive_command = DriveCommand(hw, drive_signal=DriveSignal(0.4, 0, 0), duration=4)
+    drive_command = DriveCommand(hw, drive_signal=DriveSignal(0.4, 0, 0), duration=4)
     
-    # scheduler = Scheduler(hw, [drive_command])
-    # scheduler.add_command(drive_command)
-    # scheduler.run()
+    scheduler = Scheduler(hw, [drive_command])
+    scheduler.add_command(drive_command)
+    scheduler.run()
 
     try:
         app.run(host='0.0.0.0', port=5000)
