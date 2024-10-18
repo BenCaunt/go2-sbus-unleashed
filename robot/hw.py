@@ -130,11 +130,11 @@ class OpenCVCamera(Subsystem):
 
             # Log the frame to Rerun
             if self.frame_count % 10 == 0:
-                rr.log("camera", rr.Image(frame))
+                rr.log("camera", rr.Image(dst))
             self.frame_count += 1
             sleep(0.2)
 
-        return frame
+        return dst
 
     def tick(self):
         self.get_frame()
