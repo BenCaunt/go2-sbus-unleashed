@@ -109,3 +109,30 @@ class StopCommand(Command):
         
     def tick(self):
         pass
+    
+
+class AprilTagCenterHeading(Command):
+    """
+    use apriltag hw.get_frame() = [frame, cx] and use a p controller to center cx at 200 pixels.
+    use the turn signal to turn the robot by a certain amount based on the heading error.
+    """
+    def __init__(self, hw: RobotHardware):
+        super().__init__(hw)
+        self.kp = 0.01
+        
+    def start(self):
+        self.start_time = time.time()
+        self.last_error = 0
+        
+    
+    def tick(self):
+        frame, cx = self.hw.camera.get_frame()
+        error = cx - 200
+        turn = self.kp * error
+        self.hw.send_values(0, 0, turn)
+        self.last_error = error
+        
+    def is_finished(self):
+        return time.time() - self.start_time > 20
+    
+    

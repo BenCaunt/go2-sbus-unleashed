@@ -79,6 +79,8 @@ class OpenCVCamera(Subsystem):
         if ret:
             print("got frame")
             ret, frame = self.cap.read()
+            # flip frame upside down
+            frame = cv2.flip(frame, -1)
         else:
             print("failed to get frame")
             return None
@@ -102,6 +104,9 @@ class OpenCVCamera(Subsystem):
 
         # Detect AprilTags
         results = self.detector.detect(gray)
+        
+        cx = 200
+        cy = 0
 
         # Draw detections on the frame
         for r in results:
@@ -136,10 +141,7 @@ class OpenCVCamera(Subsystem):
         self.frame_count += 1
         sleep(0.2)
 
-        return dst
-
-    def tick(self):
-        self.get_frame()
+        return dst, cx
 
     def release(self):
         self.cap.release()
