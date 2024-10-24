@@ -28,7 +28,7 @@ def control():
         
     hw.send_values(x, y, angular)
     hw.tick()
-    hw.camera.get_frame()
+    # hw.camera.get_frame()
     
     dt = time.time() - last_time
     print(f"dt (ms): {dt * 1000}")
