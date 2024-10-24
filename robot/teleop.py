@@ -13,9 +13,11 @@ rr.init("RobotTeleop", spawn=False)
 rr.connect("192.168.1.209:9876")  # Replace with your PC's IP address
 
 app = Flask(__name__)
+last_time = time.time()
 
 @app.route('/control', methods=['POST'])
 def control():
+    global last_time
     data = request.json
     if not data or 'x' not in data or 'y' not in data or 'angular' not in data:
         return jsonify({"error": "Invalid data"}), 400
@@ -27,6 +29,10 @@ def control():
     hw.send_values(x, y, angular)
     hw.tick()
     hw.camera.get_frame()
+    
+    dt = time.time() - last_time
+    print(f"dt: {dt}")
+    last_time = time.time()
 
     return jsonify({"status": "success"}), 200
 

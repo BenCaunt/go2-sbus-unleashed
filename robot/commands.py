@@ -116,7 +116,7 @@ class AprilTagCenterHeading(Command):
     def __init__(self, hw: RobotHardware):
         super().__init__(hw)
         self.kp = 0.005
-        self.cx_ref = 300
+        self.cx_ref = 320
         
     def start(self):
         self.start_time = time.time()
