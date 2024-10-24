@@ -7,7 +7,7 @@ pygame.init()
 pygame.joystick.init()
 
 # Set up the server URL
-SERVER_URL = "http://192.168.1.117:5000/control"  # Replace ROBOT_IP_ADDRESS with your robot's IP
+SERVER_URL = "http://192.168.1.224:5000/control"  # Replace ROBOT_IP_ADDRESS with your robot's IP
 
 def map_axis_to_normalized(axis_value):
     # Pygame axis values are already normalized (-1 to 1)

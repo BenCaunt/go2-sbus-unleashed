@@ -1,5 +1,4 @@
 import serial
-
 from constants import SER_PORT
 import rerun as rr
 import cv2
@@ -55,7 +54,6 @@ def map_normalized_to_value(norm_value):
     # Map the normalized value (-1 to 1) to the range 192 to 1792
     return int(992 + norm_value * 800)
 
-from time import sleep
 
 class OpenCVCamera(Subsystem):
     def __init__(self):

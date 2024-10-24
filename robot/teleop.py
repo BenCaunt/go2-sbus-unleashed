@@ -26,6 +26,7 @@ def control():
         
     hw.send_values(x, y, angular)
     hw.tick()
+    hw.camera.get_frame()
 
     return jsonify({"status": "success"}), 200
 
