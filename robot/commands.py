@@ -117,6 +117,7 @@ class AprilTagCenterHeading(Command):
         super().__init__(hw)
         self.kp = 0.005
         self.cx_ref = 320
+        self.last_time = time.time()
         
     def start(self):
         self.start_time = time.time()
@@ -124,6 +125,9 @@ class AprilTagCenterHeading(Command):
         
     
     def tick(self):
+        dt = time.time() - self.last_time
+        self.last_time = time.time()
+        print(f"tag command dt (ms): {dt * 1000}")
         frame, cx = self.hw.camera.get_frame()
         error = cx - self.cx_ref
         turn = self.kp * error
