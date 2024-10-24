@@ -31,7 +31,7 @@ def control():
     hw.camera.get_frame()
     
     dt = time.time() - last_time
-    print(f"dt: {dt}")
+    print(f"dt (ms): {dt * 1000}")
     last_time = time.time()
 
     return jsonify({"status": "success"}), 200
