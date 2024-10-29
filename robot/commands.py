@@ -128,13 +128,17 @@ class AprilTagCenterHeading(Command):
         dt = time.time() - self.last_time
         self.last_time = time.time()
         print(f"tag command dt (ms): {dt * 1000}")
+        
         frame, cx = self.hw.camera.get_frame()
-        error = cx - self.cx_ref
-        turn = self.kp * error
-        turn = max(-0.6, min(0.6, turn))
-        print(f"turn: {turn}")
-        self.hw.send_values(0, 0, turn)
-        self.last_error = error
+        if cx is not None:  
+            error = cx - self.cx_ref
+            turn = self.kp * error
+            turn = max(-0.6, min(0.6, turn))
+            print(f"turn: {turn}")
+            self.hw.send_values(0, 0, turn)
+            self.last_error = error
+        else:
+            self.hw.send_values(0, 0, 0)
         
     def is_finished(self):
         return time.time() - self.start_time > 20
@@ -159,12 +163,12 @@ class AprilTagDriveToTag(Command):
         
     def tick(self):
         frame, cx = self.hw.camera.get_frame()
-        error = cx - self.cx_ref
-        turn = self.kp * error
-        turn = max(-0.6, min(0.6, turn))
-        print(f"turn: {turn}")
-        if frame is not None:
-            self.hw.send_values(self.drive_speed, 0, turn)
+        if cx is not None:
+            error = cx - self.cx_ref
+            turn = self.kp * error
+            turn = max(-0.6, min(0.6, turn))
+            print(f"turn: {turn}")
+            self.hw.send_values(0, self.drive_speed, turn)
         else:
             self.hw.send_values(0, 0, 0)
 

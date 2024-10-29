@@ -82,7 +82,7 @@ class OpenCVCamera(Subsystem):
             frame = cv2.flip(frame, -1)
         else:
             print("failed to get frame")
-            return None, self.cx_ref
+            return None, None
 
         # Get frame dimensions
         h, w = frame.shape[:2]
@@ -104,7 +104,7 @@ class OpenCVCamera(Subsystem):
         # Detect AprilTags
         results = self.detector.detect(gray)
         
-        cx_ret = 200
+        cx_ret = None
 
 
         # Draw detections on the frame
