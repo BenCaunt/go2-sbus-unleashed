@@ -167,8 +167,10 @@ class AprilTagDriveToTag(Command):
             error = cx - self.cx_ref
             turn = self.kp * error
             turn = max(-0.6, min(0.6, turn))
+            # scale drive by turn error 
+            drive = self.drive_speed * (1 - turn)
             print(f"turn: {turn}")
-            self.hw.send_values(0, self.drive_speed, turn)
+            self.hw.send_values(0, drive, turn)
         else:
             self.hw.send_values(0, 0, 0)
 
