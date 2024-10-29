@@ -173,4 +173,4 @@ class AprilTagDriveToTag(Command):
             self.hw.send_values(0, 0, 0)
 
     def is_finished(self):
-        return time.time() - self.start_time > 25
+        return time.time() - self.start_time > 60
