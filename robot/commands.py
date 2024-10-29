@@ -140,3 +140,33 @@ class AprilTagCenterHeading(Command):
         return time.time() - self.start_time > 20
     
     
+class AprilTagDriveToTag(Command):
+    """
+    use apriltag hw.get_frame() = [frame, cx] and use a p controller to drive the robot to the tag.
+    use the turn signal to turn the robot by a certain amount based on the heading error.
+    
+    Go at constant speed at 0.5 
+    """
+    def __init__(self, hw: RobotHardware):
+        super().__init__(hw)
+        self.kp = 0.005
+        self.cx_ref = 320
+        self.last_time = time.time()
+        self.drive_speed = 0.5
+        
+    def start(self):
+        self.start_time = time.time()
+        
+    def tick(self):
+        frame, cx = self.hw.camera.get_frame()
+        error = cx - self.cx_ref
+        turn = self.kp * error
+        turn = max(-0.6, min(0.6, turn))
+        print(f"turn: {turn}")
+        if frame is not None:
+            self.hw.send_values(self.drive_speed, 0, turn)
+        else:
+            self.hw.send_values(0, 0, 0)
+
+    def is_finished(self):
+        return time.time() - self.start_time > 25

@@ -3,7 +3,7 @@ import time
 from flask import Flask, request, jsonify
 import rerun as rr
 from hw import RobotHardware
-from commands import AprilTagCenterHeading, DriveCommand, DriveSignal, Scheduler
+from commands import AprilTagDriveToTag, Scheduler
 
 # Configure the robot hardware
 hw = RobotHardware()
@@ -31,7 +31,7 @@ def control():
 
 if __name__ == '__main__':
     
-    tag_align = AprilTagCenterHeading(hw)
+    tag_align = AprilTagDriveToTag(hw)
     
     scheduler = Scheduler(hw, [tag_align])
     scheduler.run()

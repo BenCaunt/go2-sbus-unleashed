@@ -70,6 +70,7 @@ class OpenCVCamera(Subsystem):
                                        debug=False,
                                        quad_contours=True)
         self.detector = apriltag.Detector(options)
+        self.cx_ref = 320
 
                 
     def get_frame(self):
@@ -81,7 +82,7 @@ class OpenCVCamera(Subsystem):
             frame = cv2.flip(frame, -1)
         else:
             print("failed to get frame")
-            return None, 200
+            return None, self.cx_ref
 
         # Get frame dimensions
         h, w = frame.shape[:2]
