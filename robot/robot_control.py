@@ -25,7 +25,6 @@ class RobotControl:
                 cmd["forward"],
                 cmd["turn"]
             )
-            self.hw.tick()
         except Exception as e:
             print(f"Failed to process twist command: {e}")
             
