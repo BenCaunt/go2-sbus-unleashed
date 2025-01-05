@@ -10,8 +10,8 @@ class RobotControl:
         self.hw = RobotHardware()
         self.session = zenoh.open(Config())
         
-        # Subscribe to twist commands
-        self.session.subscribe(
+        # Subscribe to twist commands using the correct API
+        self.subscriber = self.session.declare_subscriber(
             ROBOT_TWIST_CMD_KEY,
             self._handle_twist_command
         )
@@ -32,12 +32,15 @@ class RobotControl:
     def run(self):
         """Main control loop"""
         try:
+            print("Robot control running. Press Ctrl+C to exit.")
             while True:
                 time.sleep(0.01)  # Small sleep to prevent CPU hogging
         except KeyboardInterrupt:
             print("Shutting down...")
         finally:
             self.hw.send_values(0, 0, 0)
+            if self.subscriber:
+                self.subscriber.undeclare()
             self.session.close()
             
 if __name__ == "__main__":

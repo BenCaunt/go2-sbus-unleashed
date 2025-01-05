@@ -22,17 +22,17 @@ class RobotClient:
         self.session = zenoh.open(Config())
         
         # Publisher for twist commands
-        self.twist_publisher = self.session.put(ROBOT_TWIST_CMD_KEY)
+        self.publisher = self.session.declare_publisher(ROBOT_TWIST_CMD_KEY)
         
         # Set up subscribers if callbacks provided
         if image_callback:
-            self.session.subscribe(
+            self.image_sub = self.session.declare_subscriber(
                 CAMERA_UNDISTORTED_KEY,
                 lambda sample: self._handle_image(sample, image_callback)
             )
             
         if tag_callback:
-            self.session.subscribe(
+            self.tag_sub = self.session.declare_subscriber(
                 CAMERA_TAG_POSES_KEY,
                 lambda sample: self._handle_tag_poses(sample, tag_callback)
             )
@@ -45,7 +45,7 @@ class RobotClient:
             "forward": max(-1.0, min(1.0, twist.forward)),
             "turn": max(-1.0, min(1.0, twist.turn))
         }
-        self.session.put(ROBOT_TWIST_CMD_KEY, json.dumps(twist_data))
+        self.publisher.put(json.dumps(twist_data))
 
     def _handle_image(self, sample, callback):
         """Internal handler for image data"""
@@ -67,5 +67,11 @@ class RobotClient:
 
     def close(self):
         """Clean up Zenoh session"""
+        if hasattr(self, 'image_sub'):
+            self.image_sub.undeclare()
+        if hasattr(self, 'tag_sub'):
+            self.tag_sub.undeclare()
+        if hasattr(self, 'publisher'):
+            self.publisher.undeclare()
         if self.session:
             self.session.close() 
