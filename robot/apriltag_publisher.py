@@ -14,6 +14,7 @@ from constants import (
 
 HEADLESS = True
 TARGET_FPS = 10  # Setting fixed framerate
+FLIP_FRAME = True  # Flag to control frame flipping
 
 def main():
     # Load calibration data
@@ -82,6 +83,10 @@ def main():
             if not ret:
                 print("Failed to grab frame")
                 break
+
+            # Flip frame if enabled
+            if FLIP_FRAME:
+                frame = cv2.flip(frame, -1)  # -1 flips both horizontally and vertically
 
             # Undistort and prepare frame for detection
             undistorted = cv2.remap(frame, mapx, mapy, cv2.INTER_LINEAR)

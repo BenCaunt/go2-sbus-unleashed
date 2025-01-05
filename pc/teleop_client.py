@@ -49,9 +49,9 @@ class TeleopClient:
                 
                 # Create and send twist command
                 cmd = TwistCommand(
-                    strafe=vx,
-                    forward=vy,
-                    turn=omega
+                    strafe=-vy,
+                    forward=vx,
+                    turn=-omega
                 )
                 self.robot.send_twist(cmd)
                 
