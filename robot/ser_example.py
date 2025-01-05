@@ -1,6 +1,8 @@
 import serial
 import time
 
+# this is now just an example of how the serial interface works 
+
 from constants import SER_PORT
 
 # Configure the serial port
