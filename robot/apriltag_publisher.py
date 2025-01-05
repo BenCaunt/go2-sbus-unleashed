@@ -101,18 +101,17 @@ def main():
             )
 
             # Draw detections if not headless
-            if not HEADLESS:
-                for detection in detections:
-                    corners = detection.corners
-                    for i in range(4):
-                        pt1 = (int(corners[i][0]), int(corners[i][1]))
-                        pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
-                        cv2.line(undistorted, pt1, pt2, (0, 255, 0), 2)
+            for detection in detections:
+                corners = detection.corners
+                for i in range(4):
+                    pt1 = (int(corners[i][0]), int(corners[i][1]))
+                    pt2 = (int(corners[(i + 1) % 4][0]), int(corners[(i + 1) % 4][1]))
+                    cv2.line(undistorted, pt1, pt2, (0, 255, 0), 2)
 
-                    cX, cY = int(detection.center[0]), int(detection.center[1])
-                    cv2.circle(undistorted, (cX, cY), 5, (0, 0, 255), -1)
-                    cv2.putText(undistorted, f"ID: {detection.tag_id}", (cX - 10, cY - 10),
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                cX, cY = int(detection.center[0]), int(detection.center[1])
+                cv2.circle(undistorted, (cX, cY), 5, (0, 0, 255), -1)
+                cv2.putText(undistorted, f"ID: {detection.tag_id}", (cX - 10, cY - 10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
 
             # Publish to Zenoh
             success, buffer = cv2.imencode('.jpg', undistorted)

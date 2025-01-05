@@ -25,6 +25,7 @@ class TeleopClient:
         
     def _on_image(self, image):
         """Callback for camera images"""
+        # Ensure image is 720p resolution
         rr.log("camera", rr.Image(image))
         
     def _on_tag_poses(self, poses_data):
