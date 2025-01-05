@@ -13,7 +13,7 @@ from constants import (
 )
 
 HEADLESS = True
-TARGET_FPS = 10  # Setting fixed framerate
+TARGET_FPS = 30  # Setting fixed framerate
 FLIP_FRAME = True  # Flag to control frame flipping
 
 def main():
