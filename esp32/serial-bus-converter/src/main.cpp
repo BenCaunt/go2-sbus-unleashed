@@ -16,7 +16,7 @@ void setup() {
     sbus_tx.Begin();
 }
 
-void parseSerialData() {
+bool parseSerialData() {
     static String buffer = "";
     while (Serial.available()) {
         char c = Serial.read();
@@ -38,10 +38,16 @@ void parseSerialData() {
                 turn_value = constrain(turn_value, 192, 1792);
             }
             buffer = "";  // Clear buffer after parsing
+            return true;
         } else {
             buffer += c;  // Add character to buffer
+            if (buffer.length() > 100) {
+                buffer = "";
+                break;
+            }
         }
     }
+    return false;
 }
 
 void loop() {

@@ -6,8 +6,15 @@ def main():
     save_dir = "calibration_captures"
     os.makedirs(save_dir, exist_ok=True)
 
+    # Desired camera resolution
+    camera_width = 1280
+    camera_height = 720
+
     # Initialize video capture (webcam index 0)
     cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, camera_width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_height)
+
     if not cap.isOpened():
         print("Error: Could not open webcam.")
         return

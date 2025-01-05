@@ -8,7 +8,7 @@ def main():
     # ----- Parameters you will need to tweak -----
     # Checkerboard pattern: number of interior corners in each dimension
     # 11 by 8 checkerboard but it is interior corners so its
-    checkerboard_size = (10, 7)
+    checkerboard_size = (9, 6)
 
     # Real-world dimensions of each checkerboard square (in meters, for instance)
     # If you only need relative scaling, the exact unit can be arbitrary,
