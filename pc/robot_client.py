@@ -6,9 +6,7 @@ import json
 import time
 from dataclasses import dataclass
 from typing import Optional, Callable
-
-from robot.constants import CAMERA_TAG_POSES_KEY, CAMERA_UNDISTORTED_KEY, ROBOT_TWIST_CMD_KEY
-
+from constants import CAMERA_TAG_POSES_KEY, CAMERA_UNDISTORTED_KEY, ROBOT_TWIST_CMD_KEY
 @dataclass
 class TwistCommand:
     strafe: float  # x velocity
