@@ -5,8 +5,16 @@ import cv2
 import json
 import time
 from dataclasses import dataclass
-from typing import Optional, Callable
-from constants import CAMERA_TAG_POSES_KEY, CAMERA_UNDISTORTED_KEY, ROBOT_TWIST_CMD_KEY
+from typing import Optional, Callable, Dict
+from constants import (
+    CAMERA_TAG_POSES_KEY, 
+    FORWARD_CAMERA_UNDISTORTED_KEY, 
+    REAR_CAMERA_UNDISTORTED_KEY, 
+    ROBOT_TWIST_CMD_KEY
+)
+
+# this code runs on the pc 
+
 @dataclass
 class TwistCommand:
     strafe: float  # x velocity
@@ -14,7 +22,9 @@ class TwistCommand:
     turn: float    # angular velocity
 
 class RobotClient:
-    def __init__(self, image_callback: Optional[Callable] = None, 
+    def __init__(self, 
+                 forward_image_callback: Optional[Callable] = None,
+                 rear_image_callback: Optional[Callable] = None,
                  tag_callback: Optional[Callable] = None):
         # Initialize Zenoh session
         self.session = zenoh.open(Config())
@@ -23,12 +33,23 @@ class RobotClient:
         self.publisher = self.session.declare_publisher(ROBOT_TWIST_CMD_KEY)
         
         # Set up subscribers if callbacks provided
-        if image_callback:
-            self.image_sub = self.session.declare_subscriber(
-                CAMERA_UNDISTORTED_KEY,
-                lambda sample: self._handle_image(sample, image_callback)
+        self.image_subscribers = {}
+        
+        # Forward camera subscriber
+        if forward_image_callback:
+            self.image_subscribers['forward'] = self.session.declare_subscriber(
+                FORWARD_CAMERA_UNDISTORTED_KEY,
+                lambda sample: self._handle_image(sample, forward_image_callback, 'forward')
+            )
+        
+        # Rear camera subscriber
+        if rear_image_callback:
+            self.image_subscribers['rear'] = self.session.declare_subscriber(
+                REAR_CAMERA_UNDISTORTED_KEY,
+                lambda sample: self._handle_image(sample, rear_image_callback, 'rear')
             )
             
+        # Tag poses subscriber
         if tag_callback:
             self.tag_sub = self.session.declare_subscriber(
                 CAMERA_TAG_POSES_KEY,
@@ -45,15 +66,15 @@ class RobotClient:
         }
         self.publisher.put(json.dumps(twist_data))
 
-    def _handle_image(self, sample, callback):
+    def _handle_image(self, sample, callback, camera_id):
         """Internal handler for image data"""
         try:
             np_data = np.frombuffer(sample.payload.to_bytes(), dtype=np.uint8)
             received_img = cv2.imdecode(np_data, cv2.IMREAD_COLOR)
             if received_img is not None:
-                callback(received_img)
+                callback(received_img, camera_id)
         except Exception as e:
-            print(f"Failed to process image: {e}")
+            print(f"Failed to process image from {camera_id} camera: {e}")
 
     def _handle_tag_poses(self, sample, callback):
         """Internal handler for AprilTag poses"""
@@ -65,8 +86,8 @@ class RobotClient:
 
     def close(self):
         """Clean up Zenoh session"""
-        if hasattr(self, 'image_sub'):
-            self.image_sub.undeclare()
+        for sub in self.image_subscribers.values():
+            sub.undeclare()
         if hasattr(self, 'tag_sub'):
             self.tag_sub.undeclare()
         if hasattr(self, 'publisher'):

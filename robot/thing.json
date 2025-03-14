@@ -1,0 +1,28 @@
+{
+    "type": "http://repo.warmhub.com/jacob/typing-tester/schema/commits/TypingTesterCommit.json",
+    "additions": [
+        {
+            "type": "http://repo.warmhub.com/jacob/typing-tester/schema/assertions/TypingTestResult.json",
+            "about": { 
+                "$wref": "http://repo.warmhub.com/jacob/typing-tester/participant/1"
+            },
+            "testText": "The quick brown fox jumps over the lazy dog",
+            "timeToComplete": 12500,
+            "accuracyPercent": 97.8,
+            "sources": {
+                "typingTestApp": {
+                    "type": "http://repo.warmhub.com/jacob/typing-tester/schema/sources/TypingTestApplication.json",
+                    "appUrl": "https://typing-test.warmhub.org",
+                    "appGithubUrl": "https://github.com/warmhub/typing-test",
+                    "appVersion": {
+                        "major": 1,
+                        "minor": 0,
+                        "patch": 0
+                    }
+                }
+            }
+        }
+    ],
+    "revisions": [],
+    "retractions": []
+}

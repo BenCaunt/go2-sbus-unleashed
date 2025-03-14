@@ -8,7 +8,7 @@ import time
 
 from constants import (
     TAG_SIZE,
-    CAMERA_UNDISTORTED_KEY,
+    FORWARD_CAMERA_UNDISTORTED_KEY,
     CAMERA_TAG_POSES_KEY
 )
 
@@ -30,8 +30,8 @@ def main():
     cap = cv2.VideoCapture(0)
 
     # Set camera properties for consistent timing
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, image_width)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, image_height)
     cap.set(cv2.CAP_PROP_FPS, TARGET_FPS)
     
     # Force MJPG format for higher FPS
@@ -116,7 +116,7 @@ def main():
             # Publish to Zenoh
             success, buffer = cv2.imencode('.jpg', undistorted)
             if success:
-                z_session.put(CAMERA_UNDISTORTED_KEY, buffer.tobytes())
+                z_session.put(FORWARD_CAMERA_UNDISTORTED_KEY, buffer.tobytes())
 
             tag_poses = []
             for detection in detections:
