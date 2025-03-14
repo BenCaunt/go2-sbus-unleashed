@@ -6,7 +6,6 @@ This module provides the PC-side client for controlling and visualizing the robo
 
 - Gamepad-based teleoperation
 - Real-time visualization of multiple camera streams
-- AprilTag pose visualization
 - Combined view of forward and rear cameras
 
 ## Components
@@ -15,7 +14,6 @@ This module provides the PC-side client for controlling and visualizing the robo
 
 The `RobotClient` class handles communication with the robot:
 - Subscribes to camera streams (forward and rear)
-- Subscribes to AprilTag pose data
 - Sends twist commands for robot movement
 
 ### Teleop Client
@@ -23,7 +21,6 @@ The `RobotClient` class handles communication with the robot:
 The `TeleopClient` class provides a complete teleoperation interface:
 - Gamepad control for robot movement
 - Visualization of camera streams using Rerun
-- Visualization of detected AprilTags
 
 ### Camera Viewer
 
@@ -42,7 +39,7 @@ To start the teleoperation client:
 python teleop_client.py
 ```
 
-This will initialize the gamepad controller and connect to the robot. Camera streams and AprilTag detections will be displayed in the Rerun viewer.
+This will initialize the gamepad controller and connect to the robot. Camera streams will be displayed in the Rerun viewer.
 
 ### Camera Viewer
 
@@ -60,7 +57,6 @@ The camera streams are visualized using Rerun with the following paths:
 - Forward camera: `camera/forward`
 - Rear camera: `camera/rear`
 - Combined view: `camera/combined`
-- AprilTags: `world/robot/tags/tag_{id}`
 
 ## Dependencies
 
