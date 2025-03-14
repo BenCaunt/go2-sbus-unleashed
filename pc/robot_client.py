@@ -7,7 +7,6 @@ import time
 from dataclasses import dataclass
 from typing import Optional, Callable, Dict
 from constants import (
-    CAMERA_TAG_POSES_KEY, 
     FORWARD_CAMERA_UNDISTORTED_KEY, 
     REAR_CAMERA_UNDISTORTED_KEY, 
     ROBOT_TWIST_CMD_KEY
@@ -24,8 +23,7 @@ class TwistCommand:
 class RobotClient:
     def __init__(self, 
                  forward_image_callback: Optional[Callable] = None,
-                 rear_image_callback: Optional[Callable] = None,
-                 tag_callback: Optional[Callable] = None):
+                 rear_image_callback: Optional[Callable] = None):
         # Initialize Zenoh session
         self.session = zenoh.open(Config())
         
@@ -48,13 +46,6 @@ class RobotClient:
                 REAR_CAMERA_UNDISTORTED_KEY,
                 lambda sample: self._handle_image(sample, rear_image_callback, 'rear')
             )
-            
-        # Tag poses subscriber
-        if tag_callback:
-            self.tag_sub = self.session.declare_subscriber(
-                CAMERA_TAG_POSES_KEY,
-                lambda sample: self._handle_tag_poses(sample, tag_callback)
-            )
 
     def send_twist(self, twist: TwistCommand):
         """Send normalized twist command to robot"""
@@ -76,20 +67,10 @@ class RobotClient:
         except Exception as e:
             print(f"Failed to process image from {camera_id} camera: {e}")
 
-    def _handle_tag_poses(self, sample, callback):
-        """Internal handler for AprilTag poses"""
-        try:
-            poses_data = json.loads(sample.payload.to_string())
-            callback(poses_data)
-        except Exception as e:
-            print(f"Failed to process tag poses: {e}")
-
     def close(self):
         """Clean up Zenoh session"""
         for sub in self.image_subscribers.values():
             sub.undeclare()
-        if hasattr(self, 'tag_sub'):
-            self.tag_sub.undeclare()
         if hasattr(self, 'publisher'):
             self.publisher.undeclare()
         if self.session:
